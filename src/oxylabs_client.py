@@ -1,5 +1,7 @@
 import os
 import requests
+import streamlit
+import time
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -12,6 +14,7 @@ def post_query(payload):
     response = requests.post(os.getenv("OXYLABS_BASE_URL"), auth=(username, password), json=payload)
     response.raise_for_status()
     response_json = response.json()
+
     return response_json
 
 
@@ -35,7 +38,7 @@ def normalize_product(content):
         category_path = [cat.strip() for cat in content["category_path"] if cat]
 
     return {
-        "product_code": content.get("product_code"),
+        "asin": content.get("asin"),
         "url": content.get("url"),
         "brand": content.get("brand"),
         "price": content.get("price"),
@@ -47,25 +50,28 @@ def normalize_product(content):
         "category_path": category_path,
         "currency": content.get("currency"),
         "buybox": content.get("buybox", []),
-        "product_overview": content.get("product_overview", [])
+        "product_overview": content.get("product_overview", []),
     }
 
 
 # SCRAPE PRODUCT DETAILS
-def scrape_product_details(product_code, postal_code, domain):
+def scrape_product_details(asin, geo_location, domain):
     payload = {
         "source": "amazon_product",
-        "query": product_code,
-        "postal_code": postal_code,
+        "query": asin,
+        "geo_location": geo_location,
         "domain": domain,
-        "parse": True,
+        "parse": True
     }
     raw = post_query(payload)
     content = extract_content(raw)
     normalized = normalize_product(content)
-    if not normalized.get("product_code"):
-        normalized["product_code"] = product_code
+    if not normalized.get("asin"):
+        normalized["asin"] = asin
 
     normalized["amazon_domain"] = domain
-    normalized["postal_code"] = postal_code
+    normalized["geo_location"] = geo_location
     return normalized
+
+
+
