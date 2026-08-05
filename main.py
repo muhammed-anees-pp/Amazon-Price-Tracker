@@ -2,6 +2,8 @@ import streamlit as st
 from src.oxylabs_client import scrape_product_details
 from src.services import scrape_and_store_product, fetch_and_store_competitors
 from src.db import Database
+from src.llm import analyze_competitors
+
 
 # RENDER THE APPLICATION HEADER
 def render_header():
@@ -52,7 +54,7 @@ def render_product_card(product):
 
 # APPLICATION ENTRY
 def main():
-    st.set_page_config(page_title="Amazon Competitor Analysis", page_icon="📚", layout="wide")
+    st.set_page_config(page_title="Amazon Price Tracker", page_icon="📊", layout="wide")
     render_header()
     asin, geo, domain = render_inputs()
 
@@ -108,7 +110,8 @@ def main():
         with col1:
             if st.button("Analyze with LLM", type="primary"):
                 with st.spinner("Running LLM..."):
-                    st.text("analysis")
+                    analysis = analyze_competitors(selected_asin)
+                    st.markdown(analysis)
 
 
 if __name__ == "__main__":
