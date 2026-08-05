@@ -31,6 +31,7 @@ def main():
         with streamlit.spinner("Scrapping..."):
             product = scrape_product_details(product_code, postal_code, domain)
         streamlit.success("Product scrapped successfully")
+        streamlit.write(product)
 
 if __name__ == "__main__":
     main()
