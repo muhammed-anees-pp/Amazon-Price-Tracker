@@ -74,4 +74,37 @@ def scrape_product_details(asin, geo_location, domain):
     return normalized
 
 
+# EXTRACT SEARCH RESULTS FROM API RESPONSE
+def extract_search_results(content):
+    items = []
+    if not isinstance(content, dict):
+        return items
 
+    if "results" in content:
+        results = content["results"]
+        if isinstance(results, dict):
+            if "organic" in results:
+                items.extend(results["organic"])
+            if "paid" in results:
+                items.extend(results["paid"])
+    elif "products" in content and isinstance(content["products", list]):
+        items.extend(content["products"])
+
+    return items
+
+
+# NORMALIZE SEARCH RESULT DATA
+def normalize_search_result(item):
+    asin = item.get("asin") or item.get("product_asin")
+    title = item.get("title")
+
+    if not (asin or title):
+        return None
+
+    return {
+        "asin": asin,
+        "title": title,
+        "category": item.get("category"),
+        "price": item.get("price"),
+        "rating": item.get("rating")
+    }
