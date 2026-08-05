@@ -54,7 +54,7 @@ def render_product_card(product):
 
 # APPLICATION ENTRY
 def main():
-    st.set_page_config(page_title="Amazon Competitor Analysis", page_icon="📚", layout="wide")
+    st.set_page_config(page_title="Amazon Price Tracker", page_icon="📊", layout="wide")
     render_header()
     asin, geo, domain = render_inputs()
 
