@@ -1,0 +1,38 @@
+from tinydb import TinyDB, Query
+from datetime import datetime
+import os
+
+
+# DATABASE MANAGMENT CLASS
+class Database:
+    def __init__(self, db_path="data.json"):
+        dirname = os.path.dirname(db_path)
+        if dirname:
+            os.makedirs(dirname, exist_ok=True)
+        self.db = TinyDB(db_path)
+        self.products = self.db.table("products")
+
+    # INSERT NEW PRODUCT
+    def insert_product(self, product_data):
+        product_data["created_at"] = datetime.now().isoformat()
+        return self.products.insert(product_data)
+
+    # RETRIEVE A PRODUCT
+    def get_product(self, product_code):
+        Product = Query()
+        return self.products.get(Product.product_code == product_code)
+
+    # RETRIEVE ALL PRODUCTS
+    def get_all_products(self):
+        return self.products.all()
+
+    # SEARCH PRODUCTS
+    def search_products(self, search_criteria):
+        Product = Query()
+        query = None
+        for key, value in search_criteria.items():
+            if query is None:
+                query = (Product[key] == value)
+            else:
+                query &= (Product[key] == value)
+        return self.products.search(query) if query else []
