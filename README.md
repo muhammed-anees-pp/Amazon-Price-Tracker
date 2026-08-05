@@ -107,6 +107,4 @@ Product and competitor records are stored locally in `data.json` using TinyDB. T
 
 ## License
 
-## License
-
 This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
