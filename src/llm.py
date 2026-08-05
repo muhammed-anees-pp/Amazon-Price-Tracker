@@ -3,13 +3,13 @@ from dotenv import load_dotenv
 from src.db import Database
 from typing import Optional, List
 from pydantic import BaseModel, Field
-from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import PydanticOutputParser
 load_dotenv()
 
 
-# LLM Output Models
+# LLM OUTPUT MODELS
 class CompetitorInsights(BaseModel):
     asin: str
     title: Optional[str]
@@ -26,7 +26,7 @@ class AnalysisOutput(BaseModel):
     recommendations: List[str]
 
 
-# Format Competitor Data for Analysis
+# FORMAT COMPETITOR DATA FOR ANALYSIS
 def format_competitors(db, parent_asin):
     comps = db.search_products({"parent_asin": parent_asin})
     return [
@@ -42,7 +42,7 @@ def format_competitors(db, parent_asin):
     ]
 
 
-# Analyze Competitors Using LLM
+# ANALYZE COMPETITORS USING LLM
 def analyze_competitors(asin):
     db = Database()
     product = db.get_product(asin)
@@ -71,7 +71,7 @@ def analyze_competitors(asin):
         partial_variables={"format_instructions": parser.get_format_instructions()}
     )
 
-    llm = ChatOpenAI(model="gpt-4", temperature=0)
+    llm = ChatGoogleGenerativeAI(model=os.getenv("GEMINI_MODEL"), temperature=0,google_api_key=os.getenv("GOOGLE_API_KEY"))
 
     chain = prompt | llm | parser
 
