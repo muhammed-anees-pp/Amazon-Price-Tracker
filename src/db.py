@@ -18,9 +18,9 @@ class Database:
         return self.products.insert(product_data)
 
     # RETRIEVE A PRODUCT
-    def get_product(self, product_code):
+    def get_product(self, asin):
         Product = Query()
-        return self.products.get(Product.product_code == product_code)
+        return self.products.get(Product.asin == asin)
 
     # RETRIEVE ALL PRODUCTS
     def get_all_products(self):
