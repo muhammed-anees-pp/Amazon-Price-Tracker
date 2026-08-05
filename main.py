@@ -24,5 +24,11 @@ def main():
     render_title()
     product_code, postal_code, domain = render_input()
 
+    if streamlit.button("Scrape Product") and product_code:
+        with streamlit.spinner("Scrapping..."):
+            streamlit.write("Scrape")
+            #Scrape products
+        streamlit.success("Product scrapped successfully")
+
 if __name__ == "__main__":
     main()
