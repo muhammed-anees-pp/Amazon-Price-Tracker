@@ -1,4 +1,7 @@
+from itertools import product
+
 import streamlit
+from src.oxylabs_client import scrape_product_details
 
 
 
@@ -13,7 +16,7 @@ def render_input():
     product_code = streamlit.text_input("Product Code", placeholder="e.g., BCD2341BE")
     postal_code = streamlit.text_input("Zip/Postal Code/Pin Code", placeholder="e.g., 676489")
     domain = streamlit.selectbox("Domain", [
-        "com", "ca", "de", "fr", "it", "ae", "co.uk"
+        "com", "ca", "de", "fr", "it", "ae", "co.uk", "in"
     ])
     return product_code.strip(), postal_code.strip(), domain
 
@@ -26,8 +29,7 @@ def main():
 
     if streamlit.button("Scrape Product") and product_code:
         with streamlit.spinner("Scrapping..."):
-            streamlit.write("Scrape")
-            #Scrape products
+            product = scrape_product_details(product_code, postal_code, domain)
         streamlit.success("Product scrapped successfully")
 
 if __name__ == "__main__":

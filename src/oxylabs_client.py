@@ -49,3 +49,23 @@ def normalize_product(content):
         "buybox": content.get("buybox", []),
         "product_overview": content.get("product_overview", [])
     }
+
+
+# SCRAPE PRODUCT DETAILS
+def scrape_product_details(product_code, postal_code, domain):
+    payload = {
+        "source": "amazon_product",
+        "query": product_code,
+        "postal_code": postal_code,
+        "domain": domain,
+        "parse": True,
+    }
+    raw = post_query(payload)
+    content = extract_content(raw)
+    normalized = normalize_product(content)
+    if not normalized.get("product_code"):
+        normalized["product_code"] = product_code
+
+    normalized["amazon_domain"] = domain
+    normalized["postal_code"] = postal_code
+    return normalized
