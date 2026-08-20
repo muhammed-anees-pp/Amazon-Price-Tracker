@@ -104,7 +104,3 @@ Product and competitor records are stored locally in `data.json` using TinyDB. T
 - The quality of competitor discovery depends on the product title, category data returned by Oxylabs, and marketplace availability.
 - API usage may incur costs depending on your Oxylabs and Google AI pricing plans.
 - Keep `.env` and `data.json` out of version control if they contain private credentials or scraped business data.
-
-## License
-
-This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
